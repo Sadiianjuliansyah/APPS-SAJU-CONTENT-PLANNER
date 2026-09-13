@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="description"
+    content="Kelola ide, produksi, jadwal, dan performa konten dalam satu aplikasi."
+  >
+  <meta name="theme-color" content="#0b1120">
+
+  <title>Saju Content Planner</title>
+    <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
+    <link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="./icons/apple-touch-icon.png"
+  >
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
+  <script src="./security.js" defer></script>
+</head>
+
+<body class="pin-locked">
+<section
+  class="pin-screen"
+  id="pin-screen"
+  aria-labelledby="pin-title"
+>
+  <div class="pin-card">
+    <img
+      class="pin-logo"
+      src="./icons/icon.svg"
+      alt="Logo SCF"
+      width="88"
+      height="88"
+    >
+
+    <p class="pin-brand">SAJU CONTENT PLANNER</p>
+
+    <h1 id="pin-title">Buat PIN Pribadi</h1>
+
+    <p class="pin-description" id="pin-description">
+      Gunakan 6 digit angka untuk mengunci aplikasi pada perangkat ini.
+    </p>
+
+    <form id="pin-form">
+      <div class="form-field">
+        <label for="pin-input">PIN 6 digit</label>
+        <input
+          id="pin-input"
+          name="pin"
+          type="password"
+          inputmode="numeric"
+          pattern="[0-9]{6}"
+          minlength="6"
+          maxlength="6"
+          autocomplete="off"
+          required
+        >
+      </div>
+
+      <div class="form-field pin-confirm-field" id="pin-confirm-field">
+        <label for="pin-confirm">Ulangi PIN</label>
+        <input
+          id="pin-confirm"
+          name="pinConfirm"
+          type="password"
+          inputmode="numeric"
+          pattern="[0-9]{6}"
+          minlength="6"
+          maxlength="6"
+          autocomplete="off"
+          required
+        >
+      </div>
+
+      <p class="pin-message" id="pin-message" role="status" aria-live="polite">
+        Fungsi PIN akan diaktifkan pada langkah berikutnya.
+      </p>
+
+      <button
+        class="button button-primary pin-submit"
+        id="pin-submit"
+        type="submit"
+        disabled
+      >
+        Buat PIN
+      </button>
+    </form>
+
+    <p class="pin-footer">SAJU CONTENT EDITION</p>
+  </div>
+</section>
+
+  <div class="app-layout">
+    <!-- Navigasi utama -->
+    <aside class="sidebar">
+      <a class="brand" href="#dashboard" aria-label="Saju Content Planner — Dashboard">
+                <img
+          class="brand-icon"
+          src="./icons/icon.svg"
+          alt=""
+          width="46"
+          height="46"
+        >
+
+        <div class="brand-text">
+          <strong>Saju Content Planner</strong>
+          <span>Your creative workspace</span>
+        </div>
+      </a>
+
+      <nav class="navigation" aria-label="Menu utama">
+        <button
+          class="nav-button active"
+          type="button"
+          data-page="dashboard"
+          aria-current="page"
+        >
+          Dashboard
+        </button>
+
+        <button class="nav-button" type="button" data-page="contents">
+          Semua Konten
+        </button>
+
+        <button class="nav-button" type="button" data-page="board">
+          Papan Produksi
+        </button>
+
+        <button class="nav-button" type="button" data-page="schedule">
+          Jadwal Upload
+        </button>
+
+        <button class="nav-button" type="button" data-page="analytics">
+          Analisis Performa
+        </button>
+
+        <button class="nav-button" type="button" data-page="channels">
+          Kelola Channel
+        </button>
+
+        <button class="nav-button" type="button" data-page="backup">
+          Backup & Data
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span class="version-badge">SAJU CONTENT EDITION</span>
+        <p>Ruang untuk setiap ide besarmu.</p>
+      </div>
+    </aside>
+
+    <!-- Area utama -->
+    <main class="main-content" id="main-content">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">CONTENT WORKSPACE</p>
+          <h1 id="page-title">Dashboard</h1>
+          <p class="page-description" id="page-description">
+            Dari ide pertama sampai konten terbit, atur semuanya di sini.
+          </p>
+        </div>
+
+        <button class="button button-primary" id="add-content-button" type="button">
+          <span aria-hidden="true">+</span>
+          Tambah Konten
+        </button>
+      </header>
+
+      <section class="page active" id="page-dashboard" aria-label="Dashboard">
+        <!-- Ringkasan -->
+        <div class="stats-grid">
+          <article class="stat-card">
+            <p class="stat-label">Total Konten</p>
+            <h2 class="stat-value" id="stat-total">0</h2>
+            <p class="stat-description">Semua ide dan konten</p>
+          </article>
+
+          <article class="stat-card">
+            <p class="stat-label">Dalam Produksi</p>
+            <h2 class="stat-value" id="stat-production">0</h2>
+            <p class="stat-description">Tahap Script, Record, dan Edit</p>
+          </article>
+
+          <article class="stat-card">
+            <p class="stat-label">Sudah Upload</p>
+            <h2 class="stat-value" id="stat-uploaded">0</h2>
+            <p class="stat-description">Konten yang sudah terbit</p>
+          </article>
+
+          <article class="stat-card">
+            <p class="stat-label">Total Views</p>
+            <h2 class="stat-value" id="stat-views">0</h2>
+            <p class="stat-description">Dari performa yang kamu catat</p>
+          </article>
+        </div>
+
+        <!-- Alur produksi -->
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Alur Produksi</h2>
+              <p>Pantau jumlah konten di setiap tahap.</p>
+            </div>
+          </div>
+
+          <div class="pipeline-grid">
+            <div class="pipeline-item" data-status="Ide">
+              <span class="status-label">Ide</span>
+              <strong id="count-idea">0</strong>
+            </div>
+
+            <div class="pipeline-item" data-status="Script">
+              <span class="status-label">Script</span>
+              <strong id="count-script">0</strong>
+            </div>
+
+            <div class="pipeline-item" data-status="Record">
+              <span class="status-label">Record</span>
+              <strong id="count-record">0</strong>
+            </div>
+
+            <div class="pipeline-item" data-status="Edit">
+              <span class="status-label">Edit</span>
+              <strong id="count-edit">0</strong>
+            </div>
+
+            <div class="pipeline-item" data-status="Upload">
+              <span class="status-label">Upload</span>
+              <strong id="count-upload">0</strong>
+            </div>
+          </div>
+        </section>
+
+        <!-- Konten terbaru dan jadwal -->
+        <div class="dashboard-grid">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>Konten Terbaru</h2>
+                <p>Ide dan konten yang baru kamu tambahkan.</p>
+              </div>
+            </div>
+
+            <div id="recent-content-list">
+              <div class="empty-state">
+                <div class="empty-icon" aria-hidden="true">✦</div>
+                <h3>Mulai dari satu ide</h3>
+                <p>
+                  Simpan ide pertamamu, lalu kembangkan menjadi konten
+                  yang siap diterbitkan.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>Upload Berikutnya</h2>
+                <p>Rencana terdekat yang perlu kamu siapkan.</p>
+              </div>
+            </div>
+
+            <div id="upcoming-content-list">
+              <div class="empty-state">
+                <div class="empty-icon" aria-hidden="true">▦</div>
+                <h3>Belum ada jadwal</h3>
+                <p>
+                  Konten yang memiliki rencana tanggal upload
+                  akan muncul di sini.
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <!-- Halaman lain diisi pada tahap berikutnya -->
+      <section
+        class="page"
+        id="page-contents"
+        aria-label="Semua Konten"
+        hidden
+      ></section>
+
+      <section
+        class="page"
+        id="page-board"
+        aria-label="Papan Produksi"
+        hidden
+      ></section>
+
+      <section
+        class="page"
+        id="page-schedule"
+        aria-label="Jadwal Upload"
+        hidden
+      ></section>
+
+      <section
+        class="page"
+        id="page-analytics"
+        aria-label="Analisis Performa"
+        hidden
+      ></section>
+
+      <section
+        class="page"
+        id="page-channels"
+        aria-label="Kelola Channel"
+        hidden
+      ></section>
+
+      <section
+        class="page"
+        id="page-backup"
+        aria-label="Backup dan Data"
+        hidden
+      ></section>
+    </main>
+  </div>
+
+<!-- Form tambah konten -->
+<dialog class="content-dialog" id="content-dialog">
+  <form id="content-form">
+    <div class="panel-header">
+      <div>
+        <h2>Tambah Konten</h2>
+        <p>Tuangkan idemu, detail lainnya bisa dilengkapi nanti.</p>
+      </div>
+
+      <button
+        class="close-button"
+        id="close-content-dialog"
+        type="button"
+        aria-label="Tutup form"
+      >×</button>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-field full-width">
+        <label for="content-title">Judul / Ide Konten *</label>
+        <input
+          id="content-title"
+          name="title"
+          type="text"
+          placeholder="Contoh: 3 website gratis untuk kreator"
+          maxlength="200"
+          required
+          autofocus
+        >
+      </div>
+
+      <div class="form-field">
+        <label for="content-channel">Channel</label>
+                <input
+          id="content-channel"
+          name="channel"
+          type="text"
+          placeholder="Pilih atau ketik nama channel baru"
+          maxlength="80"
+          list="channel-suggestions"
+        >
+        <datalist id="channel-suggestions"></datalist>
+      </div>
+
+      <div class="form-field">
+        <label for="content-platform">Platform</label>
+        <select id="content-platform" name="platform">
+          <option value="">Belum ditentukan</option>
+          <option value="TikTok">TikTok</option>
+          <option value="YouTube">YouTube</option>
+          <option value="Instagram">Instagram</option>
+          <option value="Facebook">Facebook</option>
+          <option value="Lainnya">Lainnya</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="content-status">Status Produksi</label>
+        <select id="content-status" name="status">
+          <option value="Ide">Ide</option>
+          <option value="Script">Script</option>
+          <option value="Record">Record</option>
+          <option value="Edit">Edit</option>
+          <option value="Upload">Upload</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="content-scheduled-date">Rencana Tanggal Upload</label>
+        <input
+          id="content-scheduled-date"
+          name="scheduledDate"
+          type="date"
+        >
+      </div>
+
+      <div class="form-field full-width">
+        <label for="content-hook">Hook</label>
+        <textarea
+          id="content-hook"
+          name="hook"
+          rows="3"
+          placeholder="Kalimat pembuka untuk menarik perhatian penonton..."
+        ></textarea>
+      </div>
+
+      <div class="form-field full-width">
+        <label for="content-script">Script</label>
+        <textarea
+          id="content-script"
+          name="script"
+          rows="6"
+          placeholder="Tulis alur video, narasi, dan CTA di sini..."
+        ></textarea>
+      </div>
+
+      <div class="form-field full-width">
+        <label for="content-notes">Catatan Produksi</label>
+        <textarea
+          id="content-notes"
+          name="notes"
+          rows="3"
+          placeholder="Referensi, kebutuhan footage, atau catatan pengerjaan..."
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="form-footer">
+      <p id="form-hint">
+        Penyimpanan akan diaktifkan pada tahap berikutnya.
+      </p>
+
+      <button
+        class="button button-primary"
+        id="save-content-button"
+        type="submit"
+        disabled
+      >
+        Simpan Konten
+      </button>
+    </div>
+<section class="performance-section" aria-labelledby="performance-heading">
+  <div class="panel-header">
+    <div>
+      <h2 id="performance-heading">Performa Konten</h2>
+      <p>Isi setelah konten terbit. Angka bisa diperbarui kapan saja.</p>
+    </div>
+  </div>
+
+  <div class="form-grid">
+    <div class="form-field full-width">
+      <label for="content-uploaded-date">Tanggal Terbit Aktual</label>
+      <input
+        id="content-uploaded-date"
+        name="uploadedDate"
+        type="date"
+      >
+    </div>
+
+    <div class="form-field">
+      <label for="content-views">Views</label>
+      <input
+        id="content-views"
+        name="views"
+        type="number"
+        min="0"
+        max="9007199254740991"
+        step="1"
+        value="0"
+        inputmode="numeric"
+      >
+    </div>
+
+    <div class="form-field">
+      <label for="content-likes">Likes</label>
+      <input
+        id="content-likes"
+        name="likes"
+        type="number"
+        min="0"
+        max="9007199254740991"
+        step="1"
+        value="0"
+        inputmode="numeric"
+      >
+    </div>
+
+    <div class="form-field">
+      <label for="content-comments">Komentar</label>
+      <input
+        id="content-comments"
+        name="comments"
+        type="number"
+        min="0"
+        max="9007199254740991"
+        step="1"
+        value="0"
+        inputmode="numeric"
+      >
+    </div>
+
+    <div class="form-field">
+      <label for="content-followers">Followers Gained</label>
+      <input
+        id="content-followers"
+        name="followersGained"
+        type="number"
+        min="0"
+        max="9007199254740991"
+        step="1"
+        value="0"
+        inputmode="numeric"
+      >
+    </div>
+
+    <div class="form-field full-width">
+      <label for="content-evaluation">Evaluasi Performa</label>
+      <textarea
+        id="content-evaluation"
+        name="evaluation"
+        rows="4"
+        placeholder="Apa yang berhasil atau kurang? Catat dugaan penyebab dan hal yang ingin diuji pada video berikutnya."
+      ></textarea>
+    </div>
+  </div>
+</section>
+
+  </form>
+</dialog>
+
+</body>
+</html>
