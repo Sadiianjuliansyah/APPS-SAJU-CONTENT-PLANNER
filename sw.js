@@ -1,7 +1,7 @@
 "use strict";
 
-// Naikkan versi saat memperbarui file aplikasi nanti.
-const CACHE_VERSION = "v3";
+// Versi dinaikkan ke v4
+const CACHE_VERSION = "v4";
 
 // Nama cache dipisahkan berdasarkan lokasi Saju Content Planner.
 const CACHE_PREFIX =
@@ -17,11 +17,11 @@ const APP_FILES = [
   "index.html",
   "style.css",
   "app.js",
-    "security.js",
+  "security.js",
   "manifest.webmanifest",
   "icons/icon.svg",
-  "icons/icon-192.png",
-  "icons/icon-512.png",
+  "icons/icon-192-v2.png",
+  "icons/icon-512-v2.png",
   "icons/apple-touch-icon.png",
 ];
 
